@@ -380,7 +380,7 @@ def translate_opts(parser):
     group.add_argument('-data_type', default="text",
                        help="Type of the source input. Options: [text|img].")
 
-    group.add_argument('-src',   required=True,
+    group.add_argument('-src',   required=False,
                        help="""Source sequence to decode (one line per
                        sequence)""")
     group.add_argument('-src_dir',   default="",
