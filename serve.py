@@ -93,6 +93,7 @@ def get_model_api():
 
         res={}
         request_id=str(uuid.uuid4())
+        res['id']=request_id
         scgink = input_data["scg_ink"]
         try:
             scgink_data = ScgImage(scgink, request_id)
