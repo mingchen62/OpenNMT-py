@@ -31,8 +31,9 @@ default_buckets ='[[240,100], [320,80], [400,80],[400,100], [480,80], [480,100],
 outdir='temp'
 debug= True
 
+#url = 'http://localhost:8089/latex_to_asciimath'
 url = 'http://swissknife:8089/latex_to_asciimath'
-payload = {'id':'','asciimath':'', 'mathml':'', 'latex':''}
+payload = {'id':'0','asciimath':'', 'mathml':'', 'latex':''}
 headers = {'content-type': 'application/json'}
 
 from flask import Flask
@@ -219,10 +220,9 @@ def latex_asciimath(l):
     if len(l) == 1:
         return l
     payload['latex']=l
-    payload['id']=0
     http = urllib3.PoolManager()
     try:
-        r = http.request('POST',url, field=json.dumps(payload), headers=headers)
+        r = http.request('POST',url, body=json.dumps(payload), headers=headers)
         if(r.status == 200 ):
             return json.loads(r.data.decode('utf-8'))['asciimath'].strip()
     except:  # all exception
