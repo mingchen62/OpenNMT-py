@@ -219,6 +219,7 @@ def latex_asciimath(l):
     if len(l) == 1:
         return l
     payload['latex']=l
+    payload['id']=0
     http = urllib3.PoolManager()
     try:
         r = http.request('POST',url, field=json.dumps(payload), headers=headers)
