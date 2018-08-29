@@ -35,6 +35,7 @@ debug= True
 url = 'http://swissknife:8089/latex_to_asciimath'
 payload = {'id':'0','asciimath':'', 'mathml':'', 'latex':''}
 headers = {'content-type': 'application/json'}
+http_pool = urllib3.PoolManager()
 
 from flask import Flask
 app = Flask(__name__)
@@ -220,9 +221,8 @@ def latex_asciimath(l):
     if len(l) == 1:
         return l
     payload['latex']=l
-    http = urllib3.PoolManager()
     try:
-        r = http.request('POST',url, body=json.dumps(payload), headers=headers)
+        r = http_pool.request('POST',url, body=json.dumps(payload), headers=headers)
         if(r.status == 200 ):
             return json.loads(r.data.decode('utf-8'))['asciimath'].strip()
     except:  # all exception
