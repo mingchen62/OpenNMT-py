@@ -5,7 +5,7 @@ import os
 import uuid
 import sys
 import socket
-import requests
+import urllib3
 import json
 from scipy.misc import imread
 import argparse
@@ -93,8 +93,8 @@ def get_model_api():
 
         res={}
         request_id=str(uuid.uuid4())
-        res['id']=request_id
-        scgink = input_data["scg_ink"]
+        res['id']=input_data['id']
+        scgink = input_data['scg_ink']
         try:
             scgink_data = ScgImage(scgink, request_id)
         except:
@@ -103,7 +103,7 @@ def get_model_api():
             return res
         # empty traces due to scgink data
         if not scgink_data.traces:
-            res['info']="wrong scgink data"
+            res['info']='wrong scgink data'
             res['status']='error'
             return res
 
@@ -219,11 +219,12 @@ def latex_asciimath(l):
     if len(l) == 1:
         return l
     payload['latex']=l
+    http = urllib3.PoolManager()
     try:
-        r = requests.post(url, data=json.dumps(payload), headers=headers)
-        if(r.status_code == requests.codes.ok):
-            return json.loads(r.text)['asciimath'].strip()
-    except requests.exceptions.RequestException as e:  # all exception
-        print e
+        r = http.request('POST',url, field=json.dumps(payload), headers=headers)
+        if(r.status == 200 ):
+            return json.loads(r.data.decode('utf-8'))['asciimath'].strip()
+    except:  # all exception
+        print "latex_ascii error ", l 
     return ''
 
