@@ -120,7 +120,9 @@ def get_model_api():
         crop_blank_default_size, pad_size, buckets, downsample_ratio = [600,60], (8,8,8,8), default_buckets, 2
 
         l = (filename, postfix, processed_img, crop_blank_default_size, pad_size, buckets, downsample_ratio)
-        preprocess(l)
+        if not preprocess(l) :
+            res['status']='error'
+            return res
 
         # construct data
         os.system('echo '+ request_id+'_preprocessed.png ' +'>temp/test.txt');
@@ -186,16 +188,18 @@ def get_model_api():
 def preprocess(l):
     filename, postfix, output_filename, crop_blank_default_size, pad_size, buckets, downsample_ratio = l
     postfix_length = len(postfix)
-    status = image_utils.crop_image(filename, output_filename, crop_blank_default_size)
-    if not status:
-        print ('%s is blank, crop a white image of default size!'%filename)
-    status = image_utils.pad_image(output_filename, output_filename, pad_size, buckets)
-    if not status:
-        print ('%s (after cropping and padding) is larger than the largest provided bucket size, left unchanged!'%filename)
-        os.remove(output_filename)
-        return
 
-    status = image_utils.downsample_image(output_filename, output_filename, downsample_ratio)
+    try:
+        im1 = image_utils.crop_image(filename, output_filename, crop_blank_default_size)
+        im2 = image_utils.pad_image(im1, output_filename, pad_size, buckets)
+
+        status = image_utils.downsample_image(im2, output_filename, downsample_ratio)
+        im1.close()
+        im2.close()
+        return True
+    except IOError:
+        app.logger.info("IOError in preprocesing")
+        return False
 
 def detokenizer(s):
     s=s.replace("\left{","{")
