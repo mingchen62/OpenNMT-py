@@ -194,7 +194,7 @@ def preprocess(l):
         im2 = image_utils.pad_image(im1, output_filename, pad_size, buckets)
 
         status = image_utils.downsample_image(im2, output_filename, downsample_ratio)
-        im1.close()
+        #im1.close()
         #im2.close()
         return True
     except IOError:
