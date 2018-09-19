@@ -23,8 +23,10 @@ import onmt.modules
 import opts
 
 import image_utils
-sys.path.append(os.getcwd()+'/scgInklib-0.1.0')
+sys.path.append(os.getcwd()+'/scgInklib-0.1.1')
 from net.wyun.mer.ink.scgimage import ScgImage
+
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 default_buckets ='[[240,100], [320,80], [400,80],[400,100], [480,80], [480,100], [560,80], [560,100], [640,80],[640,100],\
  [720,80], [720,100], [720,120], [720, 200], [800,100],[800,320], [1000,200]]'
@@ -78,7 +80,8 @@ def get_model_api():
 
     # File to write sentences to.
     out_file = codecs.open(opt.output, 'w', 'utf-8')
-
+    hw_count = 0
+    start_0 = current_milli_time()
     def model_api( input_data):
         """
         Args:
@@ -109,7 +112,8 @@ def get_model_api():
             res['status']='error'
             return res
 
-        start_t =time.time()
+        start_t = current_milli_time()
+ 
 
         img_file_path = outdir+'/'+request_id+'_input.png'
         #convert to png format
@@ -159,8 +163,12 @@ def get_model_api():
                 n_best_preds = [" ".join(pred)
                             for pred in trans.pred_sents[:opt.n_best]]
 
+        now_t = current_milli_time()
+        hw_count = hw_count + 1
+        if hw_count %100 == 0 :
+            print "last 100 ",now_t - start_0 
+            start_0= now_t
         if debug:
-            now_t =time.time()
             print "time spent ", now_t -start_t
 
         # process the output
@@ -174,7 +182,7 @@ def get_model_api():
 
         # return the output for the api
         res['status']="succuss"
-        res['info']=''
+        res['info']=now_t -start_t
         res['mathml']=''
         res['latex']=n_best_latex[0]
         res['asciimath']=n_best_ascii[0]
