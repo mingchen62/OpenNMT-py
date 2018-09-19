@@ -58,4 +58,4 @@ if __name__ == '__main__':
     except:
         mathreco_port=8080;
     # This is used when running locally.
-    app.run(host='0.0.0.0',port=mathreco_port, debug=True)
+    app.run(host='0.0.0.0',port=mathreco_port, debug=False)
