@@ -195,7 +195,7 @@ def preprocess(l):
 
         status = image_utils.downsample_image(im2, output_filename, downsample_ratio)
         im1.close()
-        im2.close()
+        #im2.close()
         return True
     except IOError:
         app.logger.info("IOError in preprocesing")
