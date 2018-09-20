@@ -166,10 +166,9 @@ def get_model_api():
         now_t = current_milli_time()
         hw_count = hw_count + 1
         if hw_count %100 == 0 :
-            print "last 100 ",now_t - start_0 
-            start_0= now_t
-        if debug:
-            print "time spent ", now_t -start_t
+            app.logger.debug( "last 100 "+(now_t - start_0 ))
+            start_0 = now_t
+            app.logger.debug(  "time spent "+( now_t -start_t))
 
         # process the output
         n_best_latex=[]
