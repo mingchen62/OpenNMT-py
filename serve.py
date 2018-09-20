@@ -38,8 +38,6 @@ url = 'http://swissknife:8089/latex_to_asciimath'
 payload = {'id':'0','asciimath':'', 'mathml':'', 'latex':''}
 headers = {'content-type': 'application/json'}
 http_pool = urllib3.PoolManager()
-hw_count = 0
-start_0 = current_milli_time()
 
 from flask import Flask
 app = Flask(__name__)
@@ -82,6 +80,9 @@ def get_model_api():
 
     # File to write sentences to.
     out_file = codecs.open(opt.output, 'w', 'utf-8')
+    hw_count = 0
+    start_0 = current_milli_time()
+
     def model_api( input_data):
         """
         Args:
@@ -95,7 +96,8 @@ def get_model_api():
 
 
         # process input
-
+        global hw_count
+        global start_0
         res={}
         request_id=str(uuid.uuid4())
         res['id']=input_data['id']
@@ -113,7 +115,6 @@ def get_model_api():
             return res
 
         start_t = current_milli_time()
- 
 
         img_file_path = outdir+'/'+request_id+'_input.png'
         #convert to png format
