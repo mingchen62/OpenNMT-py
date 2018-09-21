@@ -33,6 +33,10 @@ default_buckets ='[[240,100], [320,80], [400,80],[400,100], [480,80], [480,100],
 outdir='temp'
 debug= True
 
+swissknife_host='swissknife'
+if os.environ["SWISSKNIFE_HOST"] != '':
+    swissknife_host= os.environ["SWISSKNIFE_HOST"]
+    app.logger.debug("swissknife_host config:"+ swissknife_host)  
 url = 'http://'+swissknife_host+':8089/latex_to_asciimath'
 payload = {'id':'0','asciimath':'', 'mathml':'', 'latex':''}
 headers = {'content-type': 'application/json'}
