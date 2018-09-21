@@ -33,8 +33,7 @@ default_buckets ='[[240,100], [320,80], [400,80],[400,100], [480,80], [480,100],
 outdir='temp'
 debug= True
 
-#url = 'http://localhost:8089/latex_to_asciimath'
-url = 'http://swissknife:8089/latex_to_asciimath'
+url = 'http://'+swissknife_host+':8089/latex_to_asciimath'
 payload = {'id':'0','asciimath':'', 'mathml':'', 'latex':''}
 headers = {'content-type': 'application/json'}
 http_pool = urllib3.PoolManager()
