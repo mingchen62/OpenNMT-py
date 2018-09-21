@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 
 from serve import get_model_api
-
+swissknife_host='swissknife'
 
 # define the app
 app = Flask(__name__)
@@ -53,8 +53,13 @@ def server_error(e):
 
 
 if __name__ == '__main__':
+    global swissknife_host;
+    if os.environ["SWISSKNIFE_HOST"] != '':
+        swissknife_host= os.environ["SWISSKNIFE_HOST"]
+        app.logger.debug("swissknife_host config:"+ swissknife_host)  
     try:
         mathreco_port=int(os.environ["MATHRECO_PORT"])
+        app.logger.debug("mathreco_port config:"+ mathreco_port)  
     except:
         mathreco_port=8080;
     # This is used when running locally.
